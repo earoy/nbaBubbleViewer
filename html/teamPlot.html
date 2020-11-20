@@ -342,7 +342,7 @@
 
 				if(selection === '76ers'){selection = 'Philly'}
 
-				console.log(selection)
+				
 
 				if(selectedTeams.has(selection)===false){
 					selectedTeams.add(selection)
@@ -383,7 +383,7 @@
 							if(selection === '76ers'){selection = 'Philly'}
 
 
-							console.log(selectedTeams)
+							
 
 							if(selectedTeams.size === 0){
 			    				barHighlight = null
@@ -392,7 +392,7 @@
 			    					.classed('backgroundRect',false)
 			    			}
 			    			else if(selectedTeams.has(selection)===false){
-			    				console.log('hi')
+			    				
 			    				d3.selectAll('.'+selection).selectAll(".groupRect")
 			 					  .classed('foregroundRect',false)
 			 					  .classed('backgroundRect',true)

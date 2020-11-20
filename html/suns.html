@@ -164,8 +164,8 @@
 
 
 
-	// d3.json("../data/percentages.json").then(function(data, error){ //for local use
-		d3.json("../data/percentages.json").then(function(data, error){ //for github pages use
+	d3.json("../data/percentages.json").then(function(data, error){ //for local use
+	
 
 			//from http://bl.ocks.org/eesur/4e0a69d57d3bfc8a82c2
 			d3.selection.prototype.moveToFront = function() {  
@@ -320,8 +320,7 @@
   	});
 
 
-	// d3.json('../data/teamStats.json').then(function(data, error){ //local
-		d3.json('../data/teamStats.json').then(function(data, error){ //github pages
+	d3.json('../data/teamStats.json').then(function(data, error){ //local
 		
 		var keys = ["PTS_reg","PTS_bubble"] //keys = Object.keys(data[0]),
 			groups = d3.map(data, function(d){return(d.TEAM_NAME)})
@@ -368,7 +367,6 @@
 
 				if(selection === '76ers'){selection = 'Philly'}
 
-				console.log(selection)
 
 				if(selectedTeams.has(selection)===false){
 					selectedTeams.add(selection)

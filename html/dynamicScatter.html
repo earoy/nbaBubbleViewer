@@ -198,7 +198,6 @@ d3.json("../data/comboPlayer.json").then(function(data, error){
 	    throw error;
   	}
 
-  	console.log(data)
 
   	d3.selection.prototype.moveToFront = function() {  
 		      return this.each(function(){
@@ -281,7 +280,7 @@ d3.json("../data/comboPlayer.json").then(function(data, error){
             .attr("id", function(d){return "b"+d.PLAYER_ID.toString();})
 	        .attr("xlink:href", function(d){return d.url1})
 	        .attr("x", function(d){return xScale(d.PTS_reg)-10})
-	        .attr("y", function(d){console.log(d.PLAYER_NAME,d.PTS_bubble);return yScale(d.PTS_bubble)-10})
+	        .attr("y", function(d){return yScale(d.PTS_bubble)-10})
 	        .attr("height", 20)
 	        .attr("width", 20)
 	        .on("mouseover", function(e,d) {
@@ -355,7 +354,7 @@ d3.json("../data/comboPlayer.json").then(function(data, error){
 
 d3.select("#selectAxes").on("change", function (d){
 
-											console.log(d,this)
+										
                                              xMetric=this.value+"_reg";
                                              xLabel = document.getElementById('selectAxes');
                                              xLabelText='Regular Season: '+xLabel.options[xLabel.selectedIndex].text;
