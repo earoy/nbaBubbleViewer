@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+
+<!-- Example based on http://bl.ocks.org/mbostock/3887118 -->
+<!-- Tooltip example from http://www.d3noob.org/2013/01/adding-tooltips-to-d3js-graph.html -->
+<!-- Coding style based on http://gist.github.com/mbostock/5977197 -->
+
+<style>
+body {
+  font: 11px sans-serif;
+}
+
+.axis path,
+.axis line {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.changeAxes{
+
+    position:relative;
+    float:bottom;
+    top:20%;
+    z-index: 0;
+}
+
+
+
+.tableDiv{
+    position:absolute;
+    border:1px solid black;
+    left:1045px;
+    top:0%;
+    z-index: 0;
+    height:200px;
+    overflow: auto;
+}
+
+.buttonArray{
+  position:absolute;
+    left:1045px;
+    top:30%;
+    z-index: 0;
+
+}
+
+.playerControls{
+  position:absolute;
+    left:1045px;
+    top:35%;
+    z-index: 0;
+
+}
+
+.dot {
+  stroke: #000;
+}
+
+.highlighted{
+ fill:white;
+ stroke: #000;
+ r:10;
+ z-index: 2;
+}
+
+.background{
+  fill:grey;
+  opacity:.2;
+}
+
+.imageHighlighted{
+	height: 30px;
+	width: 30px;
+
+}
+
+.imageBackground{
+	filter: url(#grayscale);
+}
+
+.regression {
+  stroke: red;
+}
+
+.tooltip {
+  position: absolute;
+  width: 200px;
+  height: 30px;
+  pointer-events: none;
+  border: 10px solid;
+  background-color: white;
+  border-color: white transparent transparent;
+  box-shadow: rgba(0, 0, 0, 0.3) 0 2px 10px;
+  filter: drop-shadow(rgba(0, 0, 0, 0.3) 0 2px 10px);
+  z-index: 1;
+
+}
+
+
+
+</style>
+<body>
+<script src="https://d3js.org/d3.v6.min.js"></script>
+<script src="https://unpkg.com/d3-regression@1.2.4/dist/d3-regression.min.js"></script>
+
+
+<script>
+
+var margin = {top: 20, right: 120, bottom: 30, left: 30},
+    width = 1000 - margin.left - margin.right,
+    height = 500 - margin.top - margin.bottom;
+
+var selectedPlayers = [];
+//array that will allow user to select certain group of players
+
+/* 
+ * value accessor - returns the value to encode for a given data object.
+ * scale - maps value to a visual display encoding, such as a pixel position.
+ * map function - maps from data value to display value
+ * axis - sets up axis
+ */ 
+
+// setup x 
+var xValue = function(d){return d.FG3_PCT_reg;}, // data -> value
+    xScale = d3.scaleLinear().range([0, width]), // value -> display
+    xMap = function(d) { return xScale(xValue(d));}, // data -> display
+    xAxis = d3.axisBottom(xScale)
+    xMetric = 'FG3_PCT_reg';
+
+
+
+// setup y
+var yValue = function(d) { return d.FG3_PCT_bubble;}, // data -> value
+    yScale = d3.scaleLinear().range([height, 0]), // value -> display
+    yMap = function(d) {return yScale(yValue(d));}, // data -> display
+    yAxis = d3.axisLeft(yScale)
+    yMetric = 'FG3_PCT_bubble';
+
+
+// setup fill color
+var cValue = function(d) {return [d.TEAM_ABBREVIATION,d.url1];},
+    color = d3.scaleOrdinal(d3.schemeCategory10)
+
+// add the graph canvas to the body of the webpage
+var svg = d3.select("body").append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+// add the tooltip area to the webpage
+var tooltip = d3.select("body").append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0);
+
+//load data
+d3.json("../data/comboPlayer.json").then(function(data, error){
+	
+	if (error) {
+	    console.log("Error thrown");
+	    throw error;
+  	}
+
+  	d3.selection.prototype.moveToFront = function() {  
+		      return this.each(function(){
+		        this.parentNode.parentNode.appendChild(this.parentNode);
+		      });
+		    };
+
+
+  let players = ["Seth Curry","Duncan Robinson", "Doug McDermott","JJ Redick","George Hill"]
+  
+  ///set up scale domains based on min/max values of data
+  xScale.domain([d3.min(data.LeagueDashPlayerStats, xValue)-d3.median(data.LeagueDashPlayerStats, xValue)/10, d3.max(data.LeagueDashPlayerStats, xValue)+d3.median(data.LeagueDashPlayerStats, xValue)/10]);
+  yScale.domain([d3.min(data.LeagueDashPlayerStats, yValue)-d3.median(data.LeagueDashPlayerStats, yValue)/10, d3.max(data.LeagueDashPlayerStats, yValue)+d3.median(data.LeagueDashPlayerStats, yValue)/10]);
+
+  // // x-axis
+  svg.append("g")
+      .attr("class", "x axis")
+       .attr("id", "xAxis")
+      .attr("transform", "translate(0," + height + ")")
+      .call(xAxis)
+      .append("text")
+      .attr("class", "label")
+      .attr("id", "xAxisLabel")
+      .attr("x", width)
+      .attr("y", -6)
+      .style("text-anchor", "end")
+      .text("Regular Season: 3 Point Field Goals Percentage")
+      .style("fill", "black");
+
+  // y-axis
+  svg.append("g")
+      .attr("class", "y axis")
+      .attr("id", "yAxis")
+      .call(yAxis)
+      .append("text")
+      .attr("class", "label")
+      .attr("id", "yAxisLabel")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 6)
+      .attr("dy", ".71em")
+      .style("text-anchor", "end")
+      .text("Bubble: 3 Point Field Goals Percentage")
+      .style("fill", "black");
+
+
+    // Update the nodes…
+  var dots = svg.selectAll("g.dot")
+      .data(data.LeagueDashPlayerStats, function(d) { return d.PLAYER_ID; });
+ 
+ 
+  // Enter any new dots.
+  var dotEnter = dots.enter().append("svg:g")
+      .attr("class", "node")
+      //.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+      .on("click", function(e,d){
+        //add players to side table
+        if(!(selectedPlayers.includes(d))){
+          //make sure players can only be added to table once
+          selectedPlayers.push(d); //array for highlighting a user defined subset of players
+          tabulate(selectedPlayers);
+        };
+      })
+ 
+  // Append a circle
+  dotEnter.append("svg:circle")
+         	.attr("class", function(d){
+		        return "circle "+d.PLAYER_NAME.toString();
+		      })
+      		.attr("id", function(d){
+	        return "a"+d.PLAYER_ID.toString(); //for highlighting to work need to start html id tag with "a" plus player id number
+	      })
+	      .attr("r", 3)
+	      .attr("cx", xMap)
+	      .attr("cy", yMap)
+	      .style("stroke","#eee")
+	      //.attr('opacity',0)
+	      .attr("fill", function(d) {return color(cValue(d));})
+        .attr('fill','#eee')
+        .on("mouseover", function(e,d) {
+                  tooltip.transition() //tooltip includes player name, team, axes stats, and fantasy points
+                       .duration(200)
+                       .style("opacity", .9);
+                  tooltip.html("<b>"+d.PLAYER_NAME + " " + d.TEAM_ABBREVIATION+ "<br/> Regular Season FG3_PCT: " + xValue(d).toFixed(2)
+                  + "<br/>  Bubble FG3_PCT: " + yValue(d).toFixed(2))
+                       .style("left", (e.pageX -60) + "px")
+                       .style("top", (e.pageY + 40) + "px");
+
+          })
+          .on("mouseout", function(e,d) {
+              tooltip.transition()
+                   .duration(500)
+                   .style("opacity", 0);
+             
+          });
+ 
+   
+  // Append images
+  var images = dotEnter.append("svg:image")
+            .attr("class", function(d) {return d.TEAM_ABBREVIATION.toString()+' logo ' + d.PLAYER_NAME.toString()})
+            .attr("id", function(d){return "b"+d.PLAYER_ID.toString();})
+	        .attr("xlink:href", function(d){return d.url1})
+	        .attr("x", function(d){return xScale(d.FG3_PCT_reg)-15})
+	        .attr("y", function(d){return yScale(d.FG3_PCT_bubble)-15})
+	        .attr("height", 30)
+	        .attr("width", 30)
+          .attr("class",function(d){
+              if(players.includes(d.PLAYER_NAME)) {d3.select(this).moveToFront();return 'imageHighlighted'}
+              else{return 'imageBackground'}
+          })
+	        .on("mouseover", function(e,d) {
+
+            //     if(selectedTeam===null || selectedTeam === d.TEAM_ABBREVIATION){
+            //       d3.select(this).moveToFront();
+            //   }
+
+	        	  // if(selectedTeam===null || selectedTeam === d.TEAM_ABBREVIATION){
+	        	  // 		d3.select(this).moveToFront();
+	        	  // }
+
+              if(players.includes(d.PLAYER_NAME.toString())){
+
+    		          tooltip.transition() //tooltip includes player name, team, axes stats, and fantasy points
+    		               .duration(200)
+    		               .style("opacity", .9);
+    		          tooltip.html("<b>"+d.PLAYER_NAME + " " + d.TEAM_ABBREVIATION+ "<br/> Regular Season FG3_PCT: " + xValue(d).toFixed(2)
+    		          + "<br/>  Bubble FG3_PCT: " + yValue(d).toFixed(2))
+    		               .style("left", (e.pageX -60) + "px")
+    		               .style("top", (e.pageY + 40) + "px");
+
+                 }
+		      })
+		      .on("mouseout", function(e,d) {
+		          tooltip.transition()
+		               .duration(500)
+		               .style("opacity", 0);
+		         
+		      });
+
+
+      //construct line generator based
+      var line = d3.line()
+                .x((d) => xScale(d[0]))
+                .y((d) => yScale(d[1]));
+
+    //create regression object based on initial params
+     linReg = d3.regressionLinear()
+                  .x(d => d.FG3_PCT_reg)
+                  .y(d => d.FG3_PCT_bubble)
+
+
+    //use line generator to create line based on regression object
+      svg.append("path")
+         .datum(linReg(data.LeagueDashPlayerStats))
+         .attr("d", line)
+         .attr("id", 'regLine')
+         .style("stroke", "steelblue")
+         .style("stroke-width", "2px");
+
+
+  d3.select("#updateChartButton").on("click", function(d,i){
+      //highlight user defined selection and fade other dots to background
+       d3.selectAll(".circle").classed("background",true);
+       d3.selectAll("image").classed("imageBackground",true);
+
+       for(var i in (selectedPlayers)){
+	      //  d3.select("#a"+selectedPlayers[i].PLAYER_ID).classed("background",false);
+	       	d3.select("#b"+selectedPlayers[i].PLAYER_ID).classed("imageBackground",false);
+       }
+  })
+
+d3.select("#selectAxes").on("change", function (d){
+
+											console.log(d,this)
+                                             xMetric=this.value+"_reg";
+                                             xLabel = document.getElementById('selectAxes');
+                                             xLabelText='Regular Season: '+xLabel.options[xLabel.selectedIndex].text;
+                                             yMetric=this.value+"_bubble"
+                                             yLabel = document.getElementById('selectAxes');
+                                             yLabelText='Bubble: '+yLabel.options[yLabel.selectedIndex].text;
+                                             generateScatter(xMetric,yMetric,xLabelText,yLabelText);
+                                             });
+
+
+  function generateScatter(xMetric, yMetric,xAxisText,yAxisText){
+      //function to allow for updating of axes variables
+
+      //setup x
+      var xValue = function(d) { return d[xMetric];}, // data -> value
+          xScale = d3.scaleLinear().range([0, width]), // value -> display
+          xMap = function(d) { return xScale(xValue(d));}, // data -> display
+          xAxis = d3.axisBottom(xScale);
+
+      // setup y
+      var yValue = function(d) {return d[yMetric];}, // data -> value
+          yScale = d3.scaleLinear().range([height, 0]), // value -> display
+          yMap = function(d) {return yScale(yValue(d));}, // data -> display
+          yAxis = d3.axisLeft(yScale);
+
+
+	      	d3.selection.prototype.moveToFront = function() {  
+			      return this.each(function(){
+			        this.parentNode.parentNode.appendChild(this.parentNode);
+			      });
+			    };
+
+      xScale.domain([d3.min(data.LeagueDashPlayerStats, xValue)-d3.median(data.LeagueDashPlayerStats, xValue)/10, d3.max(data.LeagueDashPlayerStats, xValue)+d3.median(data.LeagueDashPlayerStats, xValue)/10]);
+      yScale.domain([d3.min(data.LeagueDashPlayerStats, yValue)-d3.median(data.LeagueDashPlayerStats, yValue)/10, d3.max(data.LeagueDashPlayerStats, yValue)+d3.median(data.LeagueDashPlayerStats, yValue)/10]);
+
+
+      //update x axis
+      svg.select("#xAxis")
+          .transition()
+          .duration(1000)
+          .call(xAxis);
+
+      svg.select("#xAxisLabel")
+          .transition()
+          .duration(1000)
+          .text(xAxisText);
+
+
+      // Update Y Axis
+      svg.select("#yAxis")
+          .transition()
+          .duration(1000)
+          .call(yAxis);
+
+      svg.select("#yAxisLabel")
+          .transition()
+          .duration(1000)
+          .text(yAxisText);
+
+      //construct line generator based
+      var line = d3.line()
+                .x((d) => xScale(d[0]))
+                .y((d) => yScale(d[1]));
+
+      //use axis metrics from drop downs to run linear regression
+      linReg = d3.regressionLinear()
+                  .x(d => d[xMetric])
+                  .y(d => d[yMetric])
+
+      //update regression line
+      svg.select("#regLine")
+         .datum(linReg(data.LeagueDashPlayerStats))
+         .attr("d", line)
+         .style("stroke", "steelblue")
+         .style("stroke-width", "2px")
+
+
+      //set up the dots
+      svg.selectAll("circle")
+          .data(data.LeagueDashPlayerStats)
+          .transition()  // Transition from old to new
+          .duration(1000)  // Length of animation
+          .on("start", function() {  // Start animation
+                            d3.select(this)  // 'this' means the current element
+                              .attr("r", 1);  // Change size
+                        })
+          .attr("cx", xMap)
+          .attr("cy", yMap)
+          .on("end", function() {  // End animation
+                            d3.select(this)  // 'this' means the current element
+                                .transition()
+                                .duration(500)
+                                .attr("fill", function(d) {return color(cValue(d));})
+                                //.attr('opacity',0)
+                                .attr("fill","#eee")
+                                .attr("r", 3.5);  // Change radius
+                        });
+
+      //set up the logos
+      svg.selectAll(".imageHighlighted")
+          .transition()  // Transition from old to new
+          .duration(1000)  // Length of animation
+          .on("start", function() {  // Start animation
+
+                            d3.select(this)  // 'this' means the current element
+                              .attr("height", 5)
+                              .attr("width", 5);  // Change size
+                        })
+          .attr("x", function(d){console.log(d);return xScale(d[xMetric])-15})
+          .attr("y", function(d){return yScale(d[yMetric])-15})
+          .on("end", function() {  // End animation
+
+                            d3.select(this)  // 'this' means the current element
+                                .transition()
+                                .duration(500)
+                                .attr("height", 30)
+                              	.attr("width", 30);
+                              	
+              //                d3.selectAll(".imageHighlighted")
+					        	// .attr("x", function(d){return xScale(d[xMetric])-50})
+					         //  	.attr("y", function(d){return yScale(d[yMetric])-50	})
+                        });
+
+        svg.selectAll(".logo")
+           .on("mouseover", function(e,d){
+           		
+              if(players.includes(d.PLAYER_NAME)){
+                console.log("hi")
+	               tooltip.transition()
+		               .duration(200)
+		               .style("opacity", .9);
+
+	          		tooltip.html("<b>"+d.PLAYER_NAME + " " + d.TEAM_ABBREVIATION+"<br/> Regular Season " + xMetric.substring(3,xMetric.length) + ": " + d[xMetric] + "<br/> Bubble " +yMetric.substring(6,yMetric.length) +": " + d[yMetric])
+			               .style("left", (e.pageX- 60) + "px")
+			               .style("top", (e.pageY + 40) + "px");
+	               d3.select(this).moveToFront();
+               }
+
+ 
+      		})
+	      .on("mouseout", function(e,d) {
+	          tooltip.transition()
+	               .duration(500)
+	               .style("opacity", 0);
+	      });  
+
+    };
+
+
+
+  });
+
+</script>
+
+<!-- <div class = tableDiv>
+  <table id = selectionTable>
+    <thead>
+     <tr>
+        <th>Player Name</th>
+        <th>Team</th>
+      </tr>
+    </thead>
+    <tbody id = tableBody></tbody>
+  </table>
+</div> -->
+
+
+  
+
+
+<div class="changeAxes">
+        <text> Statistic:  </text>
+        <select id="selectAxes">
+        	
+            <option value="FG3A">3 Point Field Goals Attempted</option>
+            <option value="FG3M">3 Point Field Goals Made</option>
+            <option value="FG3_PCT">3 Point Field Goals Percentage</option>
+           
+        </select>
+
+    </div>
+
+    </div>
+</body>
+</html>

@@ -1,0 +1,221 @@
+<html> 
+
+<style>
+
+* {
+box-sizing: border-box;
+}
+html {
+font-family: sans-serif;
+scroll-snap-type: mandatory;
+scroll-snap-points-y: repeat(100vh);
+scroll-snap-type: y mandatory;
+}
+section {
+border-bottom: 1px solid white;
+padding: 1rem;
+height: 900px;
+scroll-snap-align: start;
+text-align: center;
+position: relative;
+}
+h1{
+position: absolute;
+top: 50%;
+transform: translateY(-50%);
+text-align: center;
+color: white;
+width: 100%;
+left: 0;
+font-size: calc(1rem + 3vw);
+}
+
+.parallax {
+  perspective: 1px;
+  height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scroll-behavior: smooth
+}
+.parallax__layer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+.parallax__layer--base {
+  transform: translateZ(0);
+}
+.parallax__layer--back {
+  transform: translateZ(-1px);
+}
+
+.dynamicScatter{
+	float:left;
+	height:550;
+	width:1300;
+}
+
+.stackedArea{
+	float:left;
+	height:800;
+	width:1000;
+}
+
+/*.teamContainer{
+	float:bottom;
+	height:900;
+	width:900;
+}*/
+
+.teamPlot{
+	float:left;
+	height:800;
+	width:900;
+}
+body {
+  background-color: #f7f7f7;
+}
+
+ 
+
+</style>
+  <head> 
+
+  </head> 
+
+  <body> 
+  	<section>
+  	 	Intro
+  	</section>
+  	<section>
+  		<b>Bubble Suns </b>
+  		<object  class = 'teamPlot' data="suns.html"></object>
+  		<div class = parallax>
+  			<div class="parallax__group">
+  				
+  	 			<div class="parallax__layer parallax__layer--base">
+  	 	
+				Scroll Up and Down this page to see the parallax scrolling effect.
+				This div is just here to enable scrolling.
+				Tip: Try to remove the background-attachment property to remove the scrolling effect.
+				</div>
+			</div>
+		</div>
+  	</section>
+
+  	<section>
+  		<b>Bubble Bucks</b>
+  	 	<object  class = 'teamPlot' data="bucks.html"></object>
+  	 	<div class = parallax>
+  			<div class="parallax__group">
+  				
+  	 			<div class="parallax__layer parallax__layer--base">
+  	 	
+				Scroll Up and Down this page to see the parallax scrolling effect.
+				This div is just here to enable scrolling.
+				Tip: Try to remove the background-attachment property to remove the scrolling effect.
+				</div>
+			</div>
+		</div>
+
+  	</section>
+
+  	
+  	<section>
+  	
+  	 	<object  class = 'teamPlot' data="teamPlot.html"></object>
+  	 	
+  	 	<div class = parallax>
+  			<div class="parallax__group">
+  				
+  	 			<div class="parallax__layer parallax__layer--base">
+  	 	
+				Scroll Up and Down this page to see the parallax scrolling effect.
+				This div is just here to enable scrolling.
+				Tip: Try to remove the background-attachment property to remove the scrolling effect.
+				</div>
+			</div>
+		</div>
+  	</section>
+
+  	<section>
+  		<b>3 Point Shooters</b>
+  	 	
+  	 	<object  class = 'teamPlot' data="threes.html"></object>
+  	 	
+  	 	<div class = parallax>
+  			<div class="parallax__group">
+  				
+  	 			<div class="parallax__layer parallax__layer--base">
+  	 	
+				Scroll Up and Down this page to see the parallax scrolling effect.
+				This div is just here to enable scrolling.
+				Tip: Try to remove the background-attachment property to remove the scrolling effect.
+				</div>
+			</div>
+		</div>
+  	</section>
+
+  	<section>
+  	 	<b>Pandemic-P?</b>
+  	 
+  	 		<object  class = 'teamPlot' data="pg.html"></object>
+  	 		<div class = parallax>
+  			<div class="parallax__group">
+  				
+  	 			<div class="parallax__layer parallax__layer--base">
+  	 	
+				Scroll Up and Down this page to see the parallax scrolling effect.
+				This div is just here to enable scrolling.
+				Tip: Try to remove the background-attachment property to remove the scrolling effect.
+				</div>
+			</div>
+		</div>
+  	</section>
+
+  	<section>
+  		<div>
+     	<object class = 'dynamicScatter child' data="dynamicScatter.html"></object>
+     	<text> some instructions and stuff </text>
+     </div>
+
+     </section>
+
+     <section>
+  	 	<b> Greek Freak vs. King James </b>
+  	 	<object class = 'teamPlot child' data="greekking.html"></object>
+  	 	<div class = parallax>
+  			<div class="parallax__group">
+  				
+  	 			<div class="parallax__layer parallax__layer--base">
+  	 	
+				Scroll Up and Down this page to see the parallax scrolling effect.
+				This div is just here to enable scrolling.
+				Tip: Try to remove the background-attachment property to remove the scrolling effect.
+
+				</div>
+			</div>
+		</div>
+  	</section>
+
+     <section>
+     	<object  class = 'teamPlot child' data="stackedArea.html"></object>
+     	<div class = parallax>
+  			<div class="parallax__group">
+  				
+  	 			<div class="parallax__layer parallax__layer--base">
+  	 	
+				Scroll Up and Down this page to see the parallax scrolling effect.
+				This div is just here to enable scrolling.
+				Tip: Try to remove the background-attachment property to remove the scrolling effect.
+
+				</div>
+			</div>
+		</div>
+     </section>
+
+    
+  </body> 
+</html>
