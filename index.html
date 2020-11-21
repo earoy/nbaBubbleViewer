@@ -19,6 +19,11 @@ scroll-snap-align: start;
 text-align: center;
 position: relative;
 }
+section.s1{
+  background-image: url('https://thumbs.dreamstime.com/b/basketball-court-wooden-floor-view-above-vector-95114104.jpg');
+  background-repeat: no-repeat;
+  background-position:center 30%;
+}
 h1{
 position: absolute;
 top: 50%;
@@ -30,12 +35,52 @@ left: 0;
 font-size: calc(1rem + 3vw);
 }
 
+/* The Modal (background) */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+/* Modal Content/Box */
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto; /* 15% from the top and centered */
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
 .parallax {
   perspective: 1px;
   height: 100vh;
   overflow-x: hidden;
   overflow-y: auto;
   scroll-behavior: smooth
+
+
 }
 .parallax__layer {
   position: absolute;
@@ -45,6 +90,7 @@ font-size: calc(1rem + 3vw);
   left: 0;
 }
 .parallax__layer--base {
+  background-color: #eee;
   transform: translateZ(0);
 }
 .parallax__layer--back {
@@ -63,22 +109,76 @@ font-size: calc(1rem + 3vw);
 	width:1000;
 }
 
-/*.teamContainer{
-	float:bottom;
-	height:900;
-	width:900;
-}*/
-
 .teamPlot{
 	float:left;
 	height:800;
 	width:900;
 }
+
+.myBtn{
+  color: #494949 !important;
+  text-transform: uppercase;
+  font-family: Times, Charcoal, serif;
+  text-decoration: none;
+  background: #ffffff;
+  padding: 5px;
+  border: 4px solid #494949 !important;
+  display: inline-block;
+  transition: all 0.4s ease 0s;
+}
+
+p {
+  text-indent: 30px;
+  font-family: Times, Charcoal, serif;
+   text-align:left
+}
+
+b {
+
+  font-family: Times, Charcoal, serif;
+}
+
+div.title{
+
+top:5%;
+right:10%;
+position: absolute;
+width: 80%;
+text-align: center;  
+font-size: 300%;          
+background: #f7f7f7;
+padding: 5px;
+}
+
+div.intro{
+
+top:30%;
+right:10%;
+position: absolute;
+width: 80%;
+border: solid;
+text-align: center;             
+background: #eee;
+padding: 5px;
+}
+
+div.citation{
+
+top:65%;
+right:10%;
+position: absolute;
+width: 80%;
+text-align: center;             
+background: #f7f7f7;
+padding: 5px;
+
+}
 body {
   background-color: #f7f7f7;
 }
 
- 
+
+
 
 </style>
   <head> 
@@ -86,8 +186,18 @@ body {
   </head> 
 
   <body> 
-  	<section>
-  	 	Intro
+  	<section class = s1>
+      <div class = title>
+        VISUALIZING THE NBA BUBBLE
+      </div>
+      <div class = intro>
+  	 	<p>In response to the COVID-19 pandemic, the NBA was forced to suspend the 2019-20 season abruptly in March, 2020. In an effort to save over a billion dollars in revenue, the league selflessly decided to resume the season at Disney World in August. In this new <q>bubble</q> format, 22 of the 30 teams were invited to participate in an abbreviated 8 game end to the regular season, followed by the standard four-round playoffs. No fans were allowed into the bubble and players were not allowed to leave (not even for chicken wings, as Lou Williams discovered). These strange circumstances, coupled with general quarantine related boredom, led to questions (at least on my part) about how would player and team performance would change once in the bubble. Would being trapped in a near empty Disney World, away from friends and family negatively impact players at all (<a href = https://twitter.com/BenGolliver/status/1299938985901518848?ref_src=twsrc%5Etfw%7Ctwcamp%5Etweetembed%7Ctwterm%5E1299938985901518848%7Ctwgr%5E&ref_url=https%3A%2F%2Fwww.nytimes.com%2F2020%2F09%2F02%2Fsports%2Fbasketball%2Fnba-bubble-mental-health.html>probably</a>, since these are all human beings with feelings and emotions who also just happen to be extremely talented at the game of basketball) or would this travel free basketball oasis lead to new levels of on court productivity and<a href = https://www.espn.com/nba/story/_/id/29674158/jimmy-butler-charging-20-cup-nba-bubble-coffee-shop)> new business ventures</a>? The following series of visualizations seeks to provide some semblance of an answer to some of these questions, as well as allowing the for follow up explorations of the datasets.</p></div>
+
+      <div class =citation>
+
+        The data and images used to generate these visualiztions are courtesy of NBA.com. 
+
+      </div>
   	</section>
   	<section>
   		<b>Bubble Suns </b>
@@ -95,11 +205,23 @@ body {
   		<div class = parallax>
   			<div class="parallax__group">
   				
-  	 			<div class="parallax__layer parallax__layer--base">
+  	 		<div class="parallax__layer parallax__layer--base">
   	 	
-				Scroll Up and Down this page to see the parallax scrolling effect.
-				This div is just here to enable scrolling.
-				Tip: Try to remove the background-attachment property to remove the scrolling effect.
+				<p>One of the big surprises of the bubble was the Phoenix Suns, who went undefeated in their 8 games at Disney World. Prior to the league-wide shutdown, the Suns had a winning percentage of only 40% but, as mentioned, went a perfect 8-0 in the bubble, before missing the playoffs. Interestingly, the Suns were one of the few teams that did not struggle offensively after play resumed in August. In just about every offensive metric, the Bubble Suns greatly outperformed the regular season Suns.</p><p>This was not the case for defensive statistics. Although the Suns gave up fewer points in the bubble, this likely was due to opposing teams coming to the bubble out of sync offensively and not an exceptional two-way performance from the Suns. Though defense is not entirely measured in steals and blocks, the Suns did not force as many turnovers in the bubble as they did in the regular season. </p>
+
+        <button class="myBtn">Reading this Chart</button>
+
+        <!-- The Modal -->
+        <div id="SunsModal" class="modal">
+
+          <!-- Modal content -->
+          <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>On this chart, the horizontal axis represents a team&#8217;s winning percentage in the regular season and the vertical axis represents a team&#8217;s winning percentage in the bubble (8 games plus playoffs). Mouse over a logo to see the exact percentages. The bar chart on the bottom compares a given statistic for each team before and during the bubble. Use the dropdown menu to explore different statistics (Note: metrics that start with OPP refer to opponents performance against a given team). Click on either a logo or bars to select teams of interest that will remain highlighted. Click on the bar or logo a second time to deselect a given team.  </p>
+          </div>
+
+          </div>
+
 				</div>
 			</div>
 		</div>
@@ -111,11 +233,22 @@ body {
   	 	<div class = parallax>
   			<div class="parallax__group">
   				
-  	 			<div class="parallax__layer parallax__layer--base">
+  	 		<div class="parallax__layer parallax__layer--base">
   	 	
-				Scroll Up and Down this page to see the parallax scrolling effect.
-				This div is just here to enable scrolling.
-				Tip: Try to remove the background-attachment property to remove the scrolling effect.
+				<p>In the regular season, the Milwaukee Bucks posted the winningest record in the NBA and were largely considered favorites to make a deep run into the playoffs before falling apart in the bubble and bowing out in the second round of the playoffs. Although the Bucks underperformed offensively in the bubble compared to the regular season, the starkest contrast comes on the defensive end of the floor. The Bucks&#8217; opponents averaged over 5 points more per game in the bubble compared to the regular season. This striking difference in defense performance is further highlighted by turnovers forced by the Bucks in the bubble. In the bubble, the Bucks blocked and stole the ball from their opponents much less frequently than in the regular season. </p>
+
+        <button class="myBtn">Reading this Chart</button>
+
+        <!-- The Modal -->
+        <div id="BucksModal" class="modal">
+
+          <!-- Modal content -->
+          <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>On this chart, the horizontal axis represents a team&#8217;s winning percentage in the regular season and the vertical axis represents a team&#8217;s winning percentage in the bubble (8 games plus playoffs). Mouse over a logo to see the exact percentages. The bar chart on the bottom compares a given statistic for each team before and during the bubble. Use the dropdown menu to explore different statistics (Note: metrics that start with OPP refer to opponents performance against a given team). Click on either a logo or bars to select teams of interest that will remain highlighted. Click on the bar or logo a second time to deselect a given team.  </p>
+          </div>
+
+          </div>
 				</div>
 			</div>
 		</div>
@@ -131,10 +264,8 @@ body {
   			<div class="parallax__group">
   				
   	 			<div class="parallax__layer parallax__layer--base">
-  	 	
-				Scroll Up and Down this page to see the parallax scrolling effect.
-				This div is just here to enable scrolling.
-				Tip: Try to remove the background-attachment property to remove the scrolling effect.
+  	 	    <p>On this chart, the horizontal axis represents a team&#8217;s winning percentage in the regular season and the vertical axis represents a team&#8217;s winning percentage in the bubble (8 games plus playoffs). Mouse over a logo to see the exact percentages. The bar chart on the bottom compares a given statistic for each team before and during the bubble. Use the dropdown menu to explore different statistics (Note: metrics that start with OPP refer to opponents performance against a given team). Click on either a logo or bars to select teams of interest that will remain highlighted. Click on the bar or logo a second time to deselect a given team.  </p>
+			
 				</div>
 			</div>
 		</div>
@@ -150,16 +281,29 @@ body {
   				
   	 			<div class="parallax__layer parallax__layer--base">
   	 	
-				Scroll Up and Down this page to see the parallax scrolling effect.
-				This div is just here to enable scrolling.
-				Tip: Try to remove the background-attachment property to remove the scrolling effect.
+				<p>One question going into the bubble was how the lack of fans would impact the sharpshooters of the league. Would the lack of fans and background crowd motion create a distraction-free environment in which shooters would excel or are these players so good at throwing a chunk of leather through a metal ring from 23 feet away that their surroundings do not make much of a difference? Here the percentage of made three pointers prior to and inside the bubble are compared for the top five three point shooters from the 2019-20 season. The line on the plot predicts a players bubble shooting based on their regular season shooting, meaning any player above the line performed better in the bubble than what would be expected based on their regular season performance.</p> <p>Looking at the numbers, Duncan Robinson, JJ Redick, and Seth Curry were extremely consistent in their shooting percentage in both the regular and bubble seasons whereas George Hill and Doug McDermott shot very well prior to the bubble before underperforming once they got to Orlando. 
+However, shooting percentage does not necessarily shed much light on how much a player is shooting the ball or how many points they are scoring from three point shots. Looking at total shots, we can see that Duncan Robinson and JJ Redick took and made  many more three pointers than the other top shooters in the league. Although Seth Curry&#8217;s bubble shooting accuracy is on par with these other two, Robinson and Redick on average got their teams an additional three (or more) points per game in the bubble. </p>
+
+        <button class="myBtn">Reading this Chart</button>
+
+        <!-- The Modal -->
+        <div id="threesModal" class="modal">
+
+          <!-- Modal content -->
+          <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>On this chart, each logo represents an individual player. The horizontal axis represents a players average of a given metric for the regular season and the vertical axis represents a players average of the same statistic in the bubble. Mouseover a logo to see information about that player. Click on the logos in the legend to highlight all the players on a given team. Use the dropdown menu to change the axes and explore different statistics. The player dropdown can be used to search for a specific player and highlight them on the plot. Click on an individual player to add them to the list of players of interest and use the <q>View Selected Players</q> button to highlight this group of players. </p>
+          </div>
+
+          </div>
+
 				</div>
 			</div>
 		</div>
   	</section>
 
   	<section>
-  	 	<b>Pandemic-P?</b>
+  	 	<b>Playoff-P</b>
   	 
   	 		<object  class = 'teamPlot' data="html/pg.html"></object>
   	 		<div class = parallax>
@@ -167,9 +311,20 @@ body {
   				
   	 			<div class="parallax__layer parallax__layer--base">
   	 	
-				Scroll Up and Down this page to see the parallax scrolling effect.
-				This div is just here to enable scrolling.
-				Tip: Try to remove the background-attachment property to remove the scrolling effect.
+				<p>Prior to the 2019-20 seasons, Kawhi Leonard and Paul George, two All-NBA level players, joined the Los Angeles Clippers and immediately put the Clippers in contention for the NBA title. Despite the hype surrounding this Clippers team, they bowed out early from the playoffs after blowing a 3-1 series lead to the Denver Nuggets. Though many factors contributed to the Clippers failure in the bubble, many fingers pointed to Paul George, who, despite giving himself the moniker <q>Playoff P</q>, was perceived as not living up to his All-NBA standards in the playoffs.</p><p> However, looking at George&#8217;s performance in the regular season and bubble shows that he remained remarkably consistent in the bubble across most offensive and defensive metrics, whereas other players on the Clippers show decreases in scoring output in the bubble compared to the regular season. Though the issues with the Clippers likely extended beyond players on-court productivity (they fired coach Doc Rivers after their playoff exit), Playoff-P, ill advised as that nickname may be, did not dramatically underperform in the bubble as some narratives may suggest. </p>
+
+        <button class="myBtn">Reading this Chart</button>
+
+        <!-- The Modal -->
+        <div id="playoffPModal" class="modal">
+
+          <!-- Modal content -->
+          <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>On this chart, each logo represents an individual player. The horizontal axis represents a players average of a given metric for the regular season and the vertical axis represents a players average of the same statistic in the bubble. Mouseover a logo to see information about that player. Click on the logos in the legend to highlight all the players on a given team. Use the dropdown menu to change the axes and explore different statistics. The player dropdown can be used to search for a specific player and highlight them on the plot. Click on an individual player to add them to the list of players of interest and use the <q>View Selected Players</q> button to highlight this group of players. </p>
+          </div>
+
+          </div>
 				</div>
 			</div>
 		</div>
@@ -178,7 +333,18 @@ body {
   	<section>
   		<div>
      	<object class = 'dynamicScatter child' data="html/dynamicScatter.html"></object>
-     	<text> some instructions and stuff </text>
+     	<button class="myBtn">Reading this Chart</button>
+
+        <!-- The Modal -->
+        <div id="indModal" class="modal">
+
+          <!-- Modal content -->
+          <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>On this chart, each logo represents an individual player. The horizontal axis represents a players average of a given metric for the regular season and the vertical axis represents a players average of the same statistic in the bubble. Mouseover a logo to see information about that player. Click on the logos in the legend to highlight all the players on a given team. Use the dropdown menu to change the axes and explore different statistics. The player dropdown can be used to search for a specific player and highlight them on the plot. Click on an individual player to add them to the list of players of interest and use the <q>View Selected Players</q> button to highlight this group of players. </p>
+          </div>
+
+          </div>
      </div>
 
      </section>
@@ -191,11 +357,23 @@ body {
   				
   	 			<div class="parallax__layer parallax__layer--base">
   	 	
-				Scroll Up and Down this page to see the parallax scrolling effect.
-				This div is just here to enable scrolling.
-				Tip: Try to remove the background-attachment property to remove the scrolling effect.
+				<p>As with every NBA season, the 2019-20 had plenty of manufactured drama surrounding the MVP race and which one of the top ten players in the world really is the best. This past season boiled down to Giannis Antetokounmpo, who led the Bucks to the NBA&#8217;s best record, and LeBron James, who guided the Lakers to their first NBA championship in a decade. Based on minutes played, both of these players featured quite heavily for their respective teams in both the bubble and regular season. In terms of scoring, both players also consistently scored a lot over the course of the season, although LeBron&#8217;s scoring output increased once the bubble started and even more so once the playoffs started. The two really diverge when one looks at rebounds and assists over the course of the season. Giannis, who is 6 foot 11 and has over a 7 foot wingspan, grabbed more rebounds and LeBron, who is one of the best passers ever (and had a stronger supporting cast than Giannis) dished out more assists. Any way you look at it, both players had incredible seasons and a reasonable case could be made for either player for MVP, it just so happens that snubbing LeBron probably generated more clicks on sports media platforms. Either way, what remains clear after all of this is that Jordan would have never even let the MVP race be this close.</p>
 
-				</div>
+        <button class="myBtn">Reading this Chart</button>
+
+        <!-- The Modal -->
+        <div id="areaModal" class="modal">
+
+          <!-- Modal content -->
+          <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>Each colored area on this chart represents one of the top ten finishers in the MVP voting in the 2019-20 season. The horizontal axis represents each individual game that these players played in and the vertical axis represents whichever metric is selected (minutes, points, rebounds, assists). The thickness of each area represents a players performance in the selected metric in a given game. For example, a thick section means that a player played more minutes in that game, whereas a thin section means a player played fewer minutes. However over the different areas to see which player that area represents. Use the buttons at the top to toggle between different statistics. </p>
+          </div>
+
+          </div>
+
+	     </div>
+
 			</div>
 		</div>
   	</section>
@@ -207,14 +385,89 @@ body {
   				
   	 			<div class="parallax__layer parallax__layer--base">
   	 	
-				Scroll Up and Down this page to see the parallax scrolling effect.
-				This div is just here to enable scrolling.
-				Tip: Try to remove the background-attachment property to remove the scrolling effect.
+				<p>Each colored area on this chart represents one of the top ten finishers in the MVP voting in the 2019-20 season. The horizontal axis represents each individual game that these players played in and the vertical axis represents whichever metric is selected (minutes, points, rebounds, assists). The thickness of each area represents a players performance in the selected metric in a given game. For example, a thick section means that a player played more minutes in that game, whereas a thin section means a player played fewer minutes. However over the different areas to see which player that area represents. Use the buttons at the top to toggle between different statistics.<p>
 
 				</div>
 			</div>
 		</div>
      </section>
+
+    <script>
+      var modal = document.getElementsByClassName("modal");
+
+      // Get the button that opens the modal
+      var btn = document.getElementsByClassName("myBtn");
+
+      // Get the <span> element that closes the modal
+      var span = document.getElementsByClassName("close");
+
+      // When the user clicks the button, open the modal 
+      btn[0].onclick = function() {
+          modal[0].style.display = "block";
+      }
+
+      btn[1].onclick = function() {
+          modal[1].style.display = "block";
+      }
+
+      btn[2].onclick = function() {
+          modal[2].style.display = "block";
+      }
+
+      btn[3].onclick = function() {
+          modal[3].style.display = "block";
+      }
+
+      btn[4].onclick = function() {
+          modal[4].style.display = "block";
+      }
+
+      btn[5].onclick = function() {
+          modal[5].style.display = "block";
+      }
+
+      btn[6].onclick = function() {
+          modal[6].style.display = "block";
+      }
+
+      // When the user clicks on <span> (x), close the modal
+      span[0].onclick = function() {
+          modal[0].style.display = "none";
+      }
+
+      span[1].onclick = function() {
+          modal[1].style.display = "none";
+      }
+
+      span[2].onclick = function() {
+          modal[2].style.display = "none";
+      }
+
+      span[3].onclick = function() {
+          modal[3].style.display = "none";
+      }
+
+      span[4].onclick = function() {
+          modal[4].style.display = "none";
+      }
+
+      span[5].onclick = function() {
+          modal[5].style.display = "none";
+      }
+
+      span[6].onclick = function() {
+          modal[6].style.display = "none";
+      }
+
+
+
+      // When the user clicks anywhere outside of the modal, close it
+      window.onclick = function(event) {
+        if (event.target == modal) {
+          modal.style.display = "none";
+        }
+      }
+    </script>
 
     
   </body> 
